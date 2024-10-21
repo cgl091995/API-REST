@@ -51,15 +51,13 @@ const getProductos= async (req, res)=>{
 const getProductosByID=async(req,res)=>{
 
     try {
-
-        const id = req.param.id
-        console.log(id)
-        const products = await Producto.findById(id)
+        
+        const products = await Producto.findById(req.params.id)
         console.log(products)
     
         return res.status(200).json(
             {ok: true,
-            msg: "leyendo productos",
+            msg: "leyendo producto por su ID",
             
         })   
     } catch (error) {
@@ -77,10 +75,10 @@ const createProductos=async(req,res)=>{
 
     const body = req.body
     const products= new Producto(body)
-    const productSaved=await products.save()
-    console.log(userSaved)
+    const productSaved = await products.save()
+    console.log(productSaved)
     
-    res.status(201).json({
+    return es.status(201).json({
     ok: true,
     msg: "creando productos",
     productSaved
@@ -103,10 +101,19 @@ const updateProductos=async(req,res)=>{
 
 
     try {
-        const body = update(req.body)
-        const products
-        res.status(200).json({"ok": true,
-            "msg": "actualizando producto por su id"
+        const id = req.params.id
+        const producto = req.body.producto
+        const descripcion = req.body.descripcion
+        const updatedProduct = await Producto.findByIdAndUpdate(
+            id, 
+           {producto, descripcion},
+           {new: true} //muestra el producto actualizado.
+        )
+       console.log(updatedProduct)
+        return res.status(200).json({
+            ok: true,
+            msg: "actualizando producto por su id",
+            updatedProduct
         }) 
     } catch (error) {
         
@@ -115,9 +122,33 @@ const updateProductos=async(req,res)=>{
 }
 
 const deleteProductos=async(req,res)=>{
-    res.status(200).json({"ok": true,
-    "msg": "eliminando producto por su id"
-})}
+    
+    const id = req.params.id
+    try{
+        
+        const producto = await Producto.findByIdAndDelete(
+            id,
+            {new: true}
+        )
+        
+    
+        return res.status(200).json({
+            ok: true,
+            msg: "eliminando producto por su id",
+            producto
+            })
+        }   catch (error) {
+            console.log(error)
+                return res.status(500).json({
+                    ok: false,
+                    msg:"error al eleminar producto",
+                    
+                
+    
+            })
+       }
+
+}
 
 
 /*----------------------------------------*/
@@ -157,7 +188,26 @@ const getServicios=async(req, res)=>{
     }
 }
 
-const getServiciosByID=async(req, res)=>{}
+const getServiciosByID=async(req, res)=>{
+
+    try {
+        
+        const services = await Servicio.findById(req.params.id)
+        console.log(services)
+    
+        return res.status(200).json(
+            {ok: true,
+            msg: "leyendo servicio por su ID",
+            
+        })   
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            ok: false,
+            msg:"error al obtener productos"
+        })
+}
+}
 
 const createServicios=async(req, res)=>{
     try {
@@ -186,9 +236,58 @@ const createServicios=async(req, res)=>{
         
 }
 
-const updateServicios=async(req, res)=>{}
+const updateServicios=async(req, res)=>{
 
-const deleteServicios=async(req, res)=>{}
+    const id = req.params.id
+    try {
+        
+        const servicio = req.body.servicio
+        const descripcion = req.body.descripcion
+        const updatedService = await Servicio.findByIdAndUpdate(
+            id, 
+           {servicio, descripcion},
+           {new: true} //muestra el producto actualizado.
+        )
+       console.log(updatedService)
+        return res.status(200).json({
+            ok: true,
+            msg: "actualizando producto por su id",
+            updatedService
+        }) 
+    } catch (error) {
+        
+    }
+        
+}
+
+const deleteServicios=async(req, res)=>{
+    
+    const id = req.params.id
+
+    try{       
+        const servicio = await Servicio.findByIdAndDelete(
+            id,
+            {new: true}
+        )
+        
+    
+        return res.status(200).json({
+            ok: true,
+            msg: "eliminando servicio por su id",
+            servicio
+            })
+        }   catch (error) {
+            console.log(error)
+                return res.status(500).json({
+                    ok: false,
+                    msg:"error al eleminar servicio",
+                    
+                
+    
+            })
+       }
+
+}
 
 
 module.exports= {
