@@ -1,0 +1,27 @@
+<%- include('templates/header') %>
+
+<%- include('templates/nav') %>   
+
+<main>
+
+    <h1>SERVICIOS desde VIEWS</h1>
+    
+    <section> 
+        <% if (servicios.length > 0) { %>
+            <% servicios.forEach(({servicio, disponible, descripcion}) => { %>
+                
+                    <article>
+                        <h2><%= servicio %></h2>
+                        <p><%= descripcion %></p>
+                    </article>
+                    
+                           
+            <% }) %>
+            <% } else { %>
+                 <p>no hay servicios disponibles</p>
+        <% } %>
+    </section>
+
+</main>
+
+    <%- include('templates/footer') %>
